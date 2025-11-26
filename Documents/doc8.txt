@@ -1,0 +1,3 @@
+Modern Software Architecture
+
+Software architecture defines how components of a system interact. Patterns like microservices, event-driven design, and layered architecture help handle scalability and complexity. APIs allow services to communicate reliably across different technologies. Observability tools measure health, latency, and throughput. Good architecture evolves as requirements and traffic grow.
