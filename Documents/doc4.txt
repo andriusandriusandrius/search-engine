@@ -1,0 +1,3 @@
+Machine Learning Basics
+
+Machine learning focuses on building algorithms that learn from data. Supervised learning uses labeled examples, while unsupervised learning discovers hidden structure in unlabeled data. Neural networks are powerful models inspired by the human brain. Feature engineering, model tuning, and evaluation are core parts of the workflow. ML models are used in recommendations, fraud detection, and speech recognition.

@@ -1,0 +1,3 @@
+Quantum Computing
+
+Quantum computing uses quantum bits, or qubits, that can represent both 0 and 1 at the same time through superposition. This property allows quantum computers to process certain computations much faster than classical systems. Entanglement enables qubits to be linked so that the state of one affects the other instantly. Researchers are exploring quantum algorithms for cryptography, optimization, and simulation. Although practical quantum computers remain limited, rapid progress continues.
