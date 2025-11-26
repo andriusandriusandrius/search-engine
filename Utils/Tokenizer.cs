@@ -26,7 +26,7 @@ namespace search_engine.Utils
             List<string> tokens = new();
             string word = "";
 
-            foreach (char c in text)
+            foreach (char c in text.ToLower())
             {
                 if (char.IsLetterOrDigit(c))
                 {
