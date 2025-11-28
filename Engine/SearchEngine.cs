@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using search_engine.Models;
 using search_engine.Utils;
 
@@ -7,10 +8,12 @@ namespace search_engine.Engine
     {
         private int nextDoc = 1;
         public InvertedIndex InvertedIndex { get; } = new();
-        public void IndexDocument(string text)
+        public void IndexDocument(DocumentFile documentFile)
         {
             int docId = nextDoc++;
-            List<string> tokens = Tokenizer.Tokenize(text);
+            InvertedIndex.TotalDocuments++;
+            InvertedIndex.Documents[docId] = documentFile;
+            List<string> tokens = Tokenizer.Tokenize(documentFile.Text);
             for (int position = 0; position < tokens.Count; position++)
             {
                 var token = tokens[position];
@@ -36,6 +39,32 @@ namespace search_engine.Engine
                 postings.Add(new Posting(docId, new List<int> { position }));
             }
 
+        }
+        public IEnumerable<(DocumentFile Document, double Score)> ScoreTFIDF(string term)
+        {
+            if (!InvertedIndex.Index.TryGetValue(term, out var termPostings))
+            {
+                return new List<(DocumentFile, double)>();
+            }
+
+            Dictionary<int, double> scores = new();
+
+            int df = termPostings.Count;
+            int N = InvertedIndex.TotalDocuments;
+            double idf = Math.Log((1 + (double)N) / (1 + df));
+
+            foreach (var termPosting in termPostings)
+            {
+                var id = termPosting.DocId;
+                var tf = termPosting.Positions.Count;
+                scores[id] = tf * idf;
+            }
+
+            var orderedScores = scores.OrderByDescending(s => s.Value);
+
+            IEnumerable<(int, double)> rankedDocIds = orderedScores.Select(s => (s.Key, s.Value));
+            IEnumerable<(DocumentFile, double)> rankedDocuments = rankedDocIds.Select(e => (InvertedIndex.Documents[e.Item1], e.Item2));
+            return rankedDocuments;
         }
 
     }
