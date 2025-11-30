@@ -8,8 +8,8 @@ namespace search_engine.Models.Tokens
         public AndToken() : base("AND", 2) { }
         public override void Apply(Stack<IQueryNode> output)
         {
-            var left = output.Pop();
             var right = output.Pop();
+            var left = output.Pop();
 
             output.Push(new AndNode(left, right));
         }

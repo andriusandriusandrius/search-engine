@@ -1,4 +1,5 @@
 using search_engine.Models;
+using search_engine.Models.Tokens;
 
 namespace search_engine.Utils
 {
@@ -6,16 +7,15 @@ namespace search_engine.Utils
     {
         public static Token Create(string raw)
         {
-            if (raw == "AND" || raw == "OR")
+            string token = raw.Trim();
+            string uppercaseToken = token.ToUpper();
+            switch (uppercaseToken)
             {
-                return new Token(raw, TokenKind.Operator);
-            }
-            else if (raw.StartsWith("\"") && raw.EndsWith("\""))
-            {
-                return new Token(raw, TokenKind.Phrase);
+                case "AND": return new AndToken();
+                case "OR": return new OrToken();
             }
 
-            return new Token(raw, TokenKind.Term);
+            return new TermToken(token);
         }
     }
 }
