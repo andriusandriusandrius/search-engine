@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using search_engine.Models;
+using search_engine.Models.Tokens;
 using search_engine.Utils;
 
 namespace search_engine.Engine
@@ -13,7 +14,7 @@ namespace search_engine.Engine
             int docId = nextDoc++;
             InvertedIndex.TotalDocuments++;
             InvertedIndex.Documents[docId] = documentFile;
-            List<string> tokens = Tokenizer.Tokenize(documentFile.Text);
+            List<string> tokens = Tokenizer.TokenizeDocument(documentFile.Text);
             for (int position = 0; position < tokens.Count; position++)
             {
                 var token = tokens[position];
@@ -65,6 +66,42 @@ namespace search_engine.Engine
             IEnumerable<(int, double)> rankedDocIds = orderedScores.Select(s => (s.Key, s.Value));
             IEnumerable<(DocumentFile, double)> rankedDocuments = rankedDocIds.Select(e => (InvertedIndex.Documents[e.Item1], e.Item2));
             return rankedDocuments;
+        }
+        public void Search(string query)
+        {
+            IEnumerable<Token> tokens = Tokenizer.TokenizeQuery(query);
+
+
+        }
+        private List<Token> ToPostFix(IEnumerable<Token> tokens)
+        {
+            Stack<OperatorToken> stack = new();
+            Queue<Token> queue = new();
+
+            foreach (var token in tokens)
+            {
+                if (token is not OperatorToken opToken)
+                {
+                    queue.Enqueue(token);
+                }
+                else
+                {
+
+                    while (stack.Count > 0 && stack.Peek().Priority > opToken.Priority)
+                    {
+                        queue.Enqueue(stack.Pop());
+                    }
+                    stack.Push(opToken);
+                }
+
+            }
+
+            while (stack.Count > 0)
+            {
+                queue.Enqueue(stack.Pop());
+            }
+
+            return queue.ToList();
         }
 
     }
