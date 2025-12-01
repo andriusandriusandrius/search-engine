@@ -1,3 +1,5 @@
+using search_engine.Models.Tokens;
+
 namespace search_engine.Utils
 {
     public static class Tokenizer
@@ -21,7 +23,7 @@ namespace search_engine.Utils
             "yourself", "yourselves"
         };
 
-        public static List<string> Tokenize(string text)
+        public static List<string> TokenizeDocument(string text)
         {
             List<string> tokens = new();
             string word = "";
@@ -54,6 +56,19 @@ namespace search_engine.Utils
             }
 
             return tokens;
+        }
+        public static List<Token> TokenizeQuery(string query)
+        {
+            List<Token> tokens = new();
+            string[] words = query.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string word in words)
+            {
+                Token token = TokenFactory.Create(word);
+                tokens.Add(token);
+            }
+            return tokens;
+
         }
     }
 }
