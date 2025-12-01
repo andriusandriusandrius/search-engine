@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using search_engine.Models;
+using search_engine.Models.Nodes;
 using search_engine.Models.Tokens;
 using search_engine.Utils;
 
@@ -41,13 +42,8 @@ namespace search_engine.Engine
             }
 
         }
-        public IEnumerable<(DocumentFile Document, double Score)> ScoreTFIDF(string term)
+        private IEnumerable<(DocumentFile Document, double Score)> ScoreTFIDF(HashSet<Posting> termPostings)
         {
-            if (!InvertedIndex.Index.TryGetValue(term, out var termPostings))
-            {
-                return new List<(DocumentFile, double)>();
-            }
-
             Dictionary<int, double> scores = new();
 
             int df = termPostings.Count;
@@ -67,11 +63,24 @@ namespace search_engine.Engine
             IEnumerable<(DocumentFile, double)> rankedDocuments = rankedDocIds.Select(e => (InvertedIndex.Documents[e.Item1], e.Item2));
             return rankedDocuments;
         }
-        public void Search(string query)
+        public IEnumerable<(DocumentFile Document, double Score)> Search(string query)
         {
+
             IEnumerable<Token> tokens = Tokenizer.TokenizeQuery(query);
+            IEnumerable<Token> postfixTokens = ToPostFix(tokens);
+            Stack<IQueryNode> queryTree = new();
 
+            foreach (var token in postfixTokens)
+            {
+                token.Apply(queryTree);
+            }
 
+            var headOperator = queryTree.Pop();
+
+            HashSet<Posting> postings = headOperator.Evaluate(InvertedIndex);
+
+            var results = ScoreTFIDF(postings);
+            return results;
         }
         private List<Token> ToPostFix(IEnumerable<Token> tokens)
         {
@@ -87,7 +96,7 @@ namespace search_engine.Engine
                 else
                 {
 
-                    while (stack.Count > 0 && stack.Peek().Priority > opToken.Priority)
+                    while (stack.Count > 0 && stack.Peek().Priority >= opToken.Priority)
                     {
                         queue.Enqueue(stack.Pop());
                     }
