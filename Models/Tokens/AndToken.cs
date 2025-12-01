@@ -5,7 +5,7 @@ namespace search_engine.Models.Tokens
 {
     public class AndToken : OperatorToken
     {
-        public AndToken() : base("AND", 2) { }
+        public AndToken() : base("and", 2) { }
         public override void Apply(Stack<IQueryNode> output)
         {
             var right = output.Pop();

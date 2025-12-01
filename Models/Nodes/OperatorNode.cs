@@ -9,6 +9,6 @@ namespace search_engine.Models.Nodes
             Left = left;
             Right = right;
         }
-        public abstract HashSet<int> Evaluate(InvertedIndex invertedIndex);
+        public abstract HashSet<Posting> Evaluate(InvertedIndex invertedIndex);
     }
 }

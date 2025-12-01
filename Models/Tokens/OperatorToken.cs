@@ -17,6 +17,6 @@ namespace search_engine.Models.Tokens
         {
             _priority = priority;
         }
-        public abstract void Apply(Stack<IQueryNode> output);
+
     }
 }

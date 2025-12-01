@@ -5,11 +5,11 @@ namespace search_engine.Models.Nodes
         private string _term;
         public string Term { get => _term; }
 
-        public HashSet<int> Evaluate(InvertedIndex invertedIndex)
+        public HashSet<Posting> Evaluate(InvertedIndex invertedIndex)
         {
             var postings = invertedIndex.Index[_term];
-            var docIds = new HashSet<int>(postings.Select(p => p.DocId));
-            return docIds;
+            var postingHashSet = new HashSet<Posting>(postings);
+            return postingHashSet;
         }
 
         public TermNode(string term)

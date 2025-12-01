@@ -5,13 +5,27 @@ namespace search_engine.Models.Nodes
 
         public AndNode(IQueryNode left, IQueryNode right) : base(left, right) { }
 
-        public override HashSet<int> Evaluate(InvertedIndex invertedIndex)
+        public override HashSet<Posting> Evaluate(InvertedIndex invertedIndex)
         {
-            HashSet<int> leftSet = Left.Evaluate(invertedIndex);
-            HashSet<int> rightSet = Right.Evaluate(invertedIndex);
 
-            leftSet.IntersectWith(rightSet);
-            return leftSet;
+            HashSet<Posting> leftSet = Left.Evaluate(invertedIndex);
+            HashSet<Posting> rightSet = Right.Evaluate(invertedIndex);
+            var results = IntersectPostings(leftSet, rightSet);
+            return results;
+        }
+        private HashSet<Posting> IntersectPostings(HashSet<Posting> leftSet, HashSet<Posting> rightSet)
+        {
+            var lookupRight = rightSet.ToDictionary(p => p.DocId);
+
+            var result = new HashSet<Posting>();
+            foreach (var posting in leftSet)
+            {
+                if (lookupRight.TryGetValue(posting.DocId, out var postingRight))
+                {
+                    result.Add(posting);
+                }
+            }
+            return result;
         }
     }
 }

@@ -5,13 +5,26 @@ namespace search_engine.Models.Nodes
 
         public OrNode(IQueryNode left, IQueryNode right) : base(left, right) { }
 
-        public override HashSet<int> Evaluate(InvertedIndex invertedIndex)
+        public override HashSet<Posting> Evaluate(InvertedIndex invertedIndex)
         {
-            HashSet<int> leftSet = Left.Evaluate(invertedIndex);
-            HashSet<int> rightSet = Right.Evaluate(invertedIndex);
+            HashSet<Posting> leftSet = Left.Evaluate(invertedIndex);
+            HashSet<Posting> rightSet = Right.Evaluate(invertedIndex);
 
-            leftSet.UnionWith(rightSet);
-            return leftSet;
+            var results = UnionSet(leftSet, rightSet);
+            return results;
+        }
+        private HashSet<Posting> UnionSet(HashSet<Posting> leftSet, HashSet<Posting> righSet)
+        {
+            var results = new HashSet<Posting>();
+            foreach (var element in leftSet)
+            {
+                results.Add(element);
+            }
+            foreach (var element in righSet)
+            {
+                results.Add(element);
+            }
+            return results;
         }
     }
 }
