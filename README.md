@@ -58,6 +58,6 @@ To try it out simply ``` git clone ``` it and then use the function ```dotnet ru
 - Frontend
 - More operations like NOT
 - Tests
-- Errors
+- Error handling
 
 
