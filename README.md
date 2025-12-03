@@ -61,3 +61,12 @@ To try it out simply ``` git clone ``` it and then use the function ```dotnet ru
 - Error handling
 
 
+### Useful resources I found while making this project:
+
+TF-IDF (the algorithm by which I rank the results):
+https://www.youtube.com/watch?v=A5ounv0D_cs
+
+Shauntin yard algorithm:
+https://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm
+https://www.youtube.com/watch?v=Wz85Hiwi5MY
+
