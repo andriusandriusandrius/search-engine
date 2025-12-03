@@ -56,7 +56,7 @@ To try it out simply ``` git clone ``` it and then use the function ```dotnet ru
 ### Features still in development:
 - Brackets
 - Frontend
-- More operations like NOT
+- More operations (e.g NOT)
 - Tests
 - Error handling
 
