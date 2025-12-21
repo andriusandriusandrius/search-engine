@@ -10,6 +10,6 @@ namespace search_engine.Models.Tokens
             get => _text;
         }
         public Token(string text) => _text = text;
-        public abstract void Apply(Stack<IQueryNode> output);
+        public abstract void Nodify(Stack<IQueryNode> output);
     }
 }
