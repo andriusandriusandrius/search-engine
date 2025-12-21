@@ -72,7 +72,10 @@ namespace search_engine.Engine
 
             foreach (var token in postfixTokens)
             {
-                token.Apply(queryTree);
+                if (token is INodifiable nodifiable)
+                {
+                    nodifiable.Nodify(queryTree);
+                }
             }
 
             var headOperator = queryTree.Pop();
@@ -95,13 +98,13 @@ namespace search_engine.Engine
                 }
                 else
                 {
-
                     while (stack.Count > 0 && stack.Peek().Priority >= opToken.Priority)
                     {
                         queue.Enqueue(stack.Pop());
                     }
                     stack.Push(opToken);
                 }
+
 
             }
 
