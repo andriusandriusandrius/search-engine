@@ -72,7 +72,10 @@ namespace search_engine.Engine
 
             foreach (var token in postfixTokens)
             {
-                token.Nodify(queryTree);
+                if (token is INodifiable nodifiable)
+                {
+                    nodifiable.Nodify(queryTree);
+                }
             }
 
             var headOperator = queryTree.Pop();
@@ -101,6 +104,7 @@ namespace search_engine.Engine
                     }
                     stack.Push(opToken);
                 }
+
 
             }
 
