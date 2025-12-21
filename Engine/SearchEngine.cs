@@ -87,18 +87,30 @@ namespace search_engine.Engine
         }
         private List<Token> ToPostFix(IEnumerable<Token> tokens)
         {
-            Stack<OperatorToken> stack = new();
+            Stack<Token> stack = new();
             Queue<Token> queue = new();
 
             foreach (var token in tokens)
             {
-                if (token is not OperatorToken opToken)
+                if (token is TermToken termToken)
                 {
-                    queue.Enqueue(token);
+                    queue.Enqueue(termToken);
                 }
-                else
+                else if (token is LeftParanthesesToken lpToken)
                 {
-                    while (stack.Count > 0 && stack.Peek().Priority >= opToken.Priority)
+                    stack.Push(lpToken);
+                }
+                else if (token is RightParanthesesToken)
+                {
+                    while (stack.Count > 0 && stack.Peek() is not LeftParanthesesToken)
+                    {
+                        queue.Enqueue(stack.Pop());
+                    }
+                    stack.Pop();
+                }
+                else if (token is OperatorToken opToken)
+                {
+                    while (stack.Count > 0 && stack.Peek() is OperatorToken topOp && topOp.Priority >= opToken.Priority)
                     {
                         queue.Enqueue(stack.Pop());
                     }
