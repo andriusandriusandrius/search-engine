@@ -13,6 +13,8 @@ namespace search_engine.Utils
             {
                 case "AND": return new AndToken();
                 case "OR": return new OrToken();
+                case ")": return new RightParanthesesToken();
+                case "(": return new LeftParanthesesToken();
             }
 
             return new TermToken(token);
