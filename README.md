@@ -49,7 +49,7 @@ As you can see from the graph we
 
 ### Why do we convert the query to postfix?
 
-Simply put, infix is not very clean to work with, because of a little thing called **order of operations**. The structure of the query would be such that we would complex logic and temperory storage since we would need to figure out which operation happens when.
+Simply put, infix is not very clean to work with, because of a little thing called **order of operations**. The structure of the query would be such that we would need complex logic and temperory storage.
 
 A better solution is to simply create a list with the operands and operators which have the **order of operations** ingrained in the very position of the elements. As such we use **postfix**.
 
