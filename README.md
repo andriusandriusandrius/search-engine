@@ -44,6 +44,8 @@ As you can see from the graph we
 1. Get a search query
 2. Tokenize the query
 3. Convert from infix to postfix using the Shunting Yard algorithm
+4. Create an expression tree
+5. Evaluate the tree
 
 ### Why do we convert the query to postfix?
 
