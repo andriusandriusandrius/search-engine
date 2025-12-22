@@ -60,13 +60,42 @@ namespace search_engine.Utils
         public static List<Token> TokenizeQuery(string query)
         {
             List<Token> tokens = new();
-            string[] words = query.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string word = "";
+            foreach (char c in query.ToLower())
+            {
+                if (char.IsLetterOrDigit(c))
+                {
+                    word += c;
+                }
+                else if (c == ')' || c == '(')
+                {
+                    if (word.Length > 0)
+                    {
+                        Token token = TokenFactory.Create(word);
+                        tokens.Add(token);
+                        word = "";
+                    }
+                    Token parantheses = TokenFactory.Create(c.ToString());
+                    tokens.Add(parantheses);
 
-            foreach (string word in words)
+                }
+                else
+                {
+                    if (word.Length > 0)
+                    {
+                        Token token = TokenFactory.Create(word);
+                        tokens.Add(token);
+                        word = "";
+                    }
+                }
+
+            }
+            if (word.Length > 0)
             {
                 Token token = TokenFactory.Create(word);
                 tokens.Add(token);
             }
+
             return tokens;
 
         }
