@@ -62,7 +62,7 @@ Since this is done by singular nodes in an expression tree we don't need to writ
 To try it out simply ``` git clone ``` it and then use the function ```dotnet run```, as you hopefully won't need to install any libraries or anything else since this is project based on simple data structures.
 
 ### Features still in development:
-- Brackets
+- ~~Parantheses~~
 - Frontend
 - More operations (e.g NOT)
 - Tests
