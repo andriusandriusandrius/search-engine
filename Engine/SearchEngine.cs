@@ -128,5 +128,26 @@ namespace search_engine.Engine
             return queue.ToList();
         }
 
+        public void Run(string query)
+        {
+            try
+            {
+                var documents = DocumentGetter.GetDocuments();
+
+                foreach (var document in documents)
+                {
+                    IndexDocument(document.Value);
+                }
+                var ats = Search(query);
+                foreach (var at in ats)
+                {
+                    Console.WriteLine($" Document: {at.Document.Title}, Score {at.Score}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unexpected error: " + ex.Message);
+            }
+        }
     }
 }
