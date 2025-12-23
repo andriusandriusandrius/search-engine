@@ -7,14 +7,30 @@ namespace search_engine.Utils
         public static Dictionary<int, DocumentFile> GetDocuments()
         {
             Dictionary<int, DocumentFile> documents = new();
-            int id = 1;
-            foreach (var path in Directory.GetFiles("Documents"))
+            try
             {
-                documents[id] = new DocumentFile(
-                     Path.GetFileNameWithoutExtension(path),
-                    File.ReadAllText(path)
-                );
-                id++;
+                int id = 1;
+                var filePaths = Directory.GetFiles("Documents");
+                if (filePaths.Length == 0)
+                {
+                    throw new FileNotFoundException("No documents found");
+                }
+                foreach (var path in Directory.GetFiles("Documents"))
+                {
+                    documents[id] = new DocumentFile(
+                        Path.GetFileNameWithoutExtension(path),
+                        File.ReadAllText(path)
+                    );
+                    id++;
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unexpected error: " + ex.Message);
             }
             return documents;
         }
