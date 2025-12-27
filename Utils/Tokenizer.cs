@@ -98,7 +98,6 @@ namespace search_engine.Utils
             {
                 Token token = TokenFactory.Create(word, position);
                 tokens.Add(token);
-                position++;
             }
 
             return tokens;

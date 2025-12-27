@@ -91,7 +91,7 @@ namespace search_engine.Engine
         {
             Stack<Token> stack = new();
             Queue<Token> queue = new();
-            foreach (var (token, index) in tokens.Select((token, index) => (token, index)))
+            foreach (var token in tokens)
             {
                 if (token is TermToken termToken)
                 {
@@ -110,7 +110,7 @@ namespace search_engine.Engine
                     }
                     if (stack.Count == 0)
                     {
-                        throw new InvalidOperationException($"Invalid query: There is no left parentheses for the right parantheses at position {index} ");
+                        throw new InvalidOperationException($"Invalid query: There is no left parentheses for the right parantheses at position {token.Position} ");
                     }
                     stack.Pop();
                 }
@@ -128,7 +128,7 @@ namespace search_engine.Engine
             {
                 if (stack.Peek() is LeftParanthesesToken)
                 {
-                    throw new InvalidOperationException($"Invalid query: There is no left parentheses for the right parantheses");
+                    throw new InvalidOperationException($"Invalid query: There is no right parentheses for the left parantheses at position {stack.Peek().Position}");
                 }
                 queue.Enqueue(stack.Pop());
             }
