@@ -68,7 +68,7 @@ To try it out simply ``` git clone ``` it and then use the function ```dotnet ru
 - Frontend
 - More operations (e.g NOT)
 - Tests
-- Error handling
+- ~~Error handling~~
 
 
 ### Useful resources I found while making this project:
