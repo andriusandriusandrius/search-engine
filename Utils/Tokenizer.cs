@@ -61,6 +61,7 @@ namespace search_engine.Utils
         {
             List<Token> tokens = new();
             string word = "";
+            int position = 0;
             foreach (char c in query.ToLower())
             {
                 if (char.IsLetterOrDigit(c))
@@ -71,20 +72,23 @@ namespace search_engine.Utils
                 {
                     if (word.Length > 0)
                     {
-                        Token token = TokenFactory.Create(word);
+                        Token token = TokenFactory.Create(word, position);
                         tokens.Add(token);
+                        position++;
                         word = "";
                     }
-                    Token parantheses = TokenFactory.Create(c.ToString());
+                    Token parantheses = TokenFactory.Create(c.ToString(), position);
                     tokens.Add(parantheses);
+                    position++;
 
                 }
                 else
                 {
                     if (word.Length > 0)
                     {
-                        Token token = TokenFactory.Create(word);
+                        Token token = TokenFactory.Create(word, position);
                         tokens.Add(token);
+                        position++;
                         word = "";
                     }
                 }
@@ -92,8 +96,9 @@ namespace search_engine.Utils
             }
             if (word.Length > 0)
             {
-                Token token = TokenFactory.Create(word);
+                Token token = TokenFactory.Create(word, position);
                 tokens.Add(token);
+                position++;
             }
 
             return tokens;
