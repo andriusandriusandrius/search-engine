@@ -29,7 +29,7 @@ A posting describes:
 
 - Where in the document the term appears
 
-- How frequently it appears
+- How frequently does the term appear
 
 By storing only the positions of each word in a document, we can naturally derive the frequency without additional bookkeeping. Nice!
 
