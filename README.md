@@ -31,7 +31,7 @@ A posting describes:
 
 - How frequently does the term appear
 
-By storing only the positions of each word in a document, we can naturally derive the frequency without additional bookkeeping. Nice!
+By storing only the positions of each word in a document, we can derive the frequency of the term without additional bookkeeping. Nice!
 
 ### So what about the actual searching?
 
