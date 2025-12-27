@@ -70,25 +70,25 @@ namespace search_engine.Utils
                 }
                 else if (c == ')' || c == '(')
                 {
+                    position++;
                     if (word.Length > 0)
                     {
+
                         Token token = TokenFactory.Create(word, position);
                         tokens.Add(token);
-                        position++;
                         word = "";
                     }
                     Token parantheses = TokenFactory.Create(c.ToString(), position);
                     tokens.Add(parantheses);
-                    position++;
 
                 }
                 else
                 {
                     if (word.Length > 0)
                     {
+                        position++;
                         Token token = TokenFactory.Create(word, position);
                         tokens.Add(token);
-                        position++;
                         word = "";
                     }
                 }
@@ -96,6 +96,7 @@ namespace search_engine.Utils
             }
             if (word.Length > 0)
             {
+                position++;
                 Token token = TokenFactory.Create(word, position);
                 tokens.Add(token);
             }
