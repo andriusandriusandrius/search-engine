@@ -45,7 +45,6 @@ namespace search_engine.Engine
         private IEnumerable<(DocumentFile Document, double Score)> ScoreTFIDF(HashSet<Posting> termPostings)
         {
             Dictionary<int, double> scores = new();
-
             int df = termPostings.Count;
             int N = InvertedIndex.TotalDocuments;
             double idf = Math.Log((1 + (double)N) / (1 + df));
@@ -65,7 +64,10 @@ namespace search_engine.Engine
         }
         public IEnumerable<(DocumentFile Document, double Score)> Search(string query)
         {
-
+            if (query.Length == 0)
+            {
+                throw new ArgumentException("Invalid query: Query cannot be empty");
+            }
             IEnumerable<Token> tokens = Tokenizer.TokenizeQuery(query);
             IEnumerable<Token> postfixTokens = ToPostFix(tokens);
             Stack<IQueryNode> queryTree = new();
@@ -80,16 +82,15 @@ namespace search_engine.Engine
 
             var headOperator = queryTree.Pop();
 
-            HashSet<Posting> postings = headOperator.Evaluate(InvertedIndex);
+            var postings = headOperator.Evaluate(InvertedIndex);
 
-            var results = ScoreTFIDF(postings);
-            return results;
+            return ScoreTFIDF(postings);
+
         }
         private List<Token> ToPostFix(IEnumerable<Token> tokens)
         {
             Stack<Token> stack = new();
             Queue<Token> queue = new();
-
             foreach (var token in tokens)
             {
                 if (token is TermToken termToken)
@@ -104,7 +105,12 @@ namespace search_engine.Engine
                 {
                     while (stack.Count > 0 && stack.Peek() is not LeftParanthesesToken)
                     {
-                        queue.Enqueue(stack.Pop());
+                        Token poppedOperation = stack.Pop();
+                        queue.Enqueue(poppedOperation);
+                    }
+                    if (stack.Count == 0)
+                    {
+                        throw new InvalidOperationException($"Invalid query: There is no left parentheses for the right parantheses at position {token.Position} ");
                     }
                     stack.Pop();
                 }
@@ -116,14 +122,18 @@ namespace search_engine.Engine
                     }
                     stack.Push(opToken);
                 }
-
-
             }
 
             while (stack.Count > 0)
             {
+                if (stack.Peek() is LeftParanthesesToken)
+                {
+                    throw new InvalidOperationException($"Invalid query: There is no right parentheses for the left parantheses at position {stack.Peek().Position}");
+                }
                 queue.Enqueue(stack.Pop());
             }
+
+
 
             return queue.ToList();
         }
@@ -146,7 +156,7 @@ namespace search_engine.Engine
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexpected error: " + ex.Message);
+                Console.WriteLine(ex.Message);
             }
         }
     }

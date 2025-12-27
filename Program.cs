@@ -2,7 +2,7 @@
 
 
 SearchEngine searchEngine = new SearchEngine();
-searchEngine.Run("(history or coffee) and space");
+searchEngine.Run("history or and space");
 
 
 

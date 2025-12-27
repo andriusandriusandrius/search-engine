@@ -13,7 +13,7 @@ namespace search_engine.Models.Tokens
                 _priority = value;
             }
         }
-        public OperatorToken(string text, int priority) : base(text)
+        public OperatorToken(string text, int priority, int position) : base(text, position)
         {
             _priority = priority;
         }
