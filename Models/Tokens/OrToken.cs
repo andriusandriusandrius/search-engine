@@ -5,7 +5,7 @@ namespace search_engine.Models.Tokens
 {
     public class OrToken : OperatorToken
     {
-        public OrToken() : base("or", 1) { }
+        public OrToken(int position) : base("or", 1, position) { }
         public override void Nodify(Stack<IQueryNode> output)
         {
             var right = output.Pop();
