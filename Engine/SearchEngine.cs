@@ -83,6 +83,12 @@ namespace search_engine.Engine
             var headOperator = queryTree.Pop();
 
             var postings = headOperator.Evaluate(InvertedIndex);
+            if (queryTree.Count != 0)
+            {
+                throw new InvalidOperationException(
+                    "Invalid query: Missing operator between terms"
+                );
+            }
 
             return ScoreTFIDF(postings);
 

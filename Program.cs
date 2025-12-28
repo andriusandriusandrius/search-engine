@@ -2,7 +2,7 @@
 
 
 SearchEngine searchEngine = new SearchEngine();
-searchEngine.Run("history or and space");
+searchEngine.Run("history and space");
 
 
 
