@@ -69,9 +69,10 @@ namespace search_engine.Engine
                 throw new ArgumentException("Invalid query: Query cannot be empty");
             }
             IEnumerable<Token> tokens = Tokenizer.TokenizeQuery(query);
-            IEnumerable<Token> postfixTokens = ToPostFix(tokens);
-            Stack<IQueryNode> queryTree = new();
 
+            IEnumerable<Token> postfixTokens = ToPostFix(tokens);
+
+            Stack<IQueryNode> queryTree = new();
             foreach (var token in postfixTokens)
             {
                 if (token is INodifiable nodifiable)
@@ -79,10 +80,10 @@ namespace search_engine.Engine
                     nodifiable.Nodify(queryTree);
                 }
             }
-
             var headOperator = queryTree.Pop();
 
             var postings = headOperator.Evaluate(InvertedIndex);
+
             if (queryTree.Count != 0)
             {
                 throw new InvalidOperationException(
@@ -99,9 +100,9 @@ namespace search_engine.Engine
             Queue<Token> queue = new();
             foreach (var token in tokens)
             {
-                if (token is TermToken termToken)
+                if (token is TermToken | token is PhraseToken)
                 {
-                    queue.Enqueue(termToken);
+                    queue.Enqueue(token);
                 }
                 else if (token is LeftParanthesesToken lpToken)
                 {
@@ -128,6 +129,7 @@ namespace search_engine.Engine
                     }
                     stack.Push(opToken);
                 }
+
             }
 
             while (stack.Count > 0)

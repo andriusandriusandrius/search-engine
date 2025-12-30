@@ -1,6 +1,6 @@
 using search_engine.Models.Nodes;
 
-namespace search_engine.Models
+namespace search_engine.Models.Tokens
 {
     public interface INodifiable
     {

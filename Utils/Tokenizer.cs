@@ -62,44 +62,77 @@ namespace search_engine.Utils
             List<Token> tokens = new();
             string word = "";
             int position = 0;
+            bool inQuotes = false;
+            var phraseTerms = new List<string>();
             foreach (char c in query.ToLower())
             {
                 if (char.IsLetterOrDigit(c))
                 {
                     word += c;
+                    continue;
                 }
-                else if (c == ')' || c == '(')
+
+                if (c == '\'')
+                {
+                    if (inQuotes)
+                    {
+                        if (word.Length > 0)
+                        {
+                            phraseTerms.Add(word);
+                            word = "";
+                        }
+
+                        position++;
+                        tokens.Add(new PhraseToken(phraseTerms, position));
+                        phraseTerms = new List<string>();
+                        inQuotes = false;
+                    }
+                    else
+                    {
+                        inQuotes = true;
+                    }
+                    continue;
+                }
+                if ((c == ')' || c == '(') && !inQuotes)
                 {
                     position++;
-                    if (word.Length > 0)
-                    {
+                    tokens.Add(TokenFactory.Create(c.ToString(), position));
 
-                        Token token = TokenFactory.Create(word, position);
-                        tokens.Add(token);
-                        word = "";
-                    }
-                    Token parantheses = TokenFactory.Create(c.ToString(), position);
-                    tokens.Add(parantheses);
-
+                    continue;
                 }
-                else
+                if (word.Length > 0 && !inQuotes)
                 {
-                    if (word.Length > 0)
+                    position++;
+                    Token token = TokenFactory.Create(word, position);
+                    tokens.Add(token);
+                    word = "";
+                }
+                if (inQuotes)
+                {
+                    if (char.IsWhiteSpace(c) && word.Length > 0)
                     {
-                        position++;
-                        Token token = TokenFactory.Create(word, position);
-                        tokens.Add(token);
+                        phraseTerms.Add(word);
                         word = "";
                     }
+                    continue;
                 }
-
             }
+
+
             if (word.Length > 0)
             {
-                position++;
-                Token token = TokenFactory.Create(word, position);
-                tokens.Add(token);
+                if (inQuotes)
+                    phraseTerms.Add(word);
+                else
+                {
+                    position++;
+                    Token token = TokenFactory.Create(word, position);
+                    tokens.Add(token);
+                }
             }
+            if (inQuotes)
+                throw new InvalidOperationException("Invalid query: unclosed quote");
+
 
             return tokens;
 
