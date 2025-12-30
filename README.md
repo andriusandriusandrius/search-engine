@@ -65,7 +65,8 @@ To try it out simply ``` git clone ``` it and then use the function ```dotnet ru
 
 ### Features still in development:
 - ~~Parantheses~~
-- Phrasal search
+- ~~Phrasal search~~
+- Optimize phrasal search
 - Fuzzy search
 - More operations (e.g NOT)
 - Tests
